@@ -12,6 +12,9 @@ namespace Nzb
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class NzbDocument : INzbDocument
     {
+        /// <summary>
+        /// The default encoding for a NZB document.
+        /// </summary>
         public static readonly System.Text.Encoding DefaultEncoding = System.Text.Encoding.GetEncoding("iso-8859-1");
 
         private static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, TimeSpan.Zero);
@@ -33,10 +36,22 @@ namespace Nzb
             _bytes = new Lazy<long>(() => Files.Sum(x => x.Bytes));
         }
 
+        /// <summary>
+        /// Gets the metadata associated with the contents of the document.
+        /// </summary>
+        /// <value>The content metadata.</value>
         public IReadOnlyDictionary<string, string> Metadata { get; private set; }
 
+        /// <summary>
+        /// Gets the information about all the files linked in the document.
+        /// </summary>
+        /// <value>The files linked in the document.</value>
         public IReadOnlyList<INzbFile> Files { get; private set; }
 
+        /// <summary>
+        /// Gets the total number of bytes for all files linked in the document.
+        /// </summary>
+        /// <value>The total number of bytes for all files linked in the document.</value>
         public long Bytes
         {
             get { return _bytes.Value; }
