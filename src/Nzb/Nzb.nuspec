@@ -8,7 +8,7 @@
     <owners>$author$</owners>
     <licenseUrl>https://raw.githubusercontent.com/khellang/Nzb/master/LICENSE</licenseUrl>
     <projectUrl>https://github.com/khellang/Nzb</projectUrl>
-    <iconUrl>http://sabnzbd.org/icon/nzb/nzb_256.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/khellang/Nzb/master/etc/nzb_256.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <copyright>Copyright © Kristian Hellang 2015</copyright>
