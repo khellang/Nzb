@@ -61,7 +61,7 @@ namespace Nzb
         /// Loads the document from the specified stream, using <see cref="DefaultEncoding"/>.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        [NotNull]
+        [Pure, NotNull]
         public static Task<INzbDocument> Load([NotNull] Stream stream)
         {
             return Load(stream, DefaultEncoding);
@@ -72,7 +72,7 @@ namespace Nzb
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="encoding">The encoding to use.</param>
-        [NotNull]
+        [Pure, NotNull]
         public static async Task<INzbDocument> Load([NotNull] Stream stream, [NotNull] System.Text.Encoding encoding)
         {
             Check.NotNull(stream, "stream");
@@ -88,7 +88,7 @@ namespace Nzb
         /// Parses the specified text.
         /// </summary>
         /// <param name="text">The text to parse.</param>
-        [NotNull]
+        [Pure, NotNull]
         public static INzbDocument Parse([NotNull] string text)
         {
             Check.NotEmpty(text, "text");

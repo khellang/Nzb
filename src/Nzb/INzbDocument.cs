@@ -15,20 +15,21 @@ namespace Nzb
         /// Gets the metadata associated with the contents of the document.
         /// </summary>
         /// <value>The content metadata.</value>
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull, PublicAPI]
         IReadOnlyDictionary<string, string> Metadata { get; }
 
         /// <summary>
         /// Gets the information about all the files linked in the document.
         /// </summary>
         /// <value>The files linked in the document.</value>
-        [NotNull, ItemNotNull]
+        [NotNull, ItemNotNull, PublicAPI]
         IReadOnlyList<INzbFile> Files { get; }
 
         /// <summary>
         /// Gets the total number of bytes for all files linked in the document.
         /// </summary>
         /// <value>The total number of bytes for all files linked in the document.</value>
+        [PublicAPI]
         long Bytes { get; }
     }
 }
