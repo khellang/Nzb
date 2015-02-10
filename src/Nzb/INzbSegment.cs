@@ -1,3 +1,5 @@
+using JetBrains.Annotations;
+
 namespace Nzb
 {
     public interface INzbSegment : IFluentInterface
@@ -6,6 +8,7 @@ namespace Nzb
 
         int Number { get; }
 
+        [NotNull]
         string MessageId { get; }
     }
 }

@@ -17,7 +17,6 @@ namespace Nzb
 
         public int Number { get; private set; }
 
-        [NotNull]
         public string MessageId { get; private set; }
 
         private string DebuggerDisplay

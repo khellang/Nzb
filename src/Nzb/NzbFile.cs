@@ -26,18 +26,14 @@ namespace Nzb
             _bytes = new Lazy<long>(() => Segments.Sum(x => x.Bytes));
         }
 
-        [NotNull]
         public string Poster { get; private set; }
 
         public DateTimeOffset Date { get; private set; }
 
-        [NotNull]
         public string Subject { get; private set; }
 
-        [NotNull]
         public IReadOnlyList<string> Groups { get; private set; }
 
-        [NotNull]
         public IReadOnlyList<INzbSegment> Segments { get; private set; }
 
         public long Bytes

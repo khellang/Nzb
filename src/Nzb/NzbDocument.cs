@@ -33,10 +33,8 @@ namespace Nzb
             _bytes = new Lazy<long>(() => Files.Sum(x => x.Bytes));
         }
 
-        [NotNull]
         public IReadOnlyDictionary<string, string> Metadata { get; private set; }
 
-        [NotNull]
         public IReadOnlyList<INzbFile> Files { get; private set; }
 
         public long Bytes
