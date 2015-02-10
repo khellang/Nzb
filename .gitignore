@@ -89,6 +89,9 @@ _ReSharper*/
 # JustCode is a .NET coding addin-in
 .JustCode
 
+# GhostDoc
+*.GhostDoc.xml
+
 # TeamCity is a build add-in
 _TeamCity*
 
