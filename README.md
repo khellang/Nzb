@@ -1,6 +1,6 @@
 # Nzb [![Build status](https://ci.appveyor.com/api/projects/status/y6l7t6xfjb1dtb7j/branch/master?svg=true)](https://ci.appveyor.com/project/khellang/nzb/branch/master)
 
-A tiny library for parsing NZB documents with .NET.
+A tiny library for parsing NZB documents with .NET. The NZB Format Specification is [available here](http://wiki.sabnzbd.org/nzb-specs).
 
 The library is implemented as a Portable Class Library (PCL), with support for the following platforms (minimum):
 
