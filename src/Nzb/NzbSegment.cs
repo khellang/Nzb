@@ -6,34 +6,49 @@ namespace Nzb
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     internal sealed class NzbSegment : INzbSegment
     {
+        private readonly long _bytes;
+
+        private readonly int _number;
+
+        private readonly string _messageId;
+
         public NzbSegment(long bytes, int number, [NotNull] string messageId)
         {
-            Bytes = bytes;
-            Number = number;
-            MessageId = Check.NotNull(messageId, "messageId");
+            _bytes = bytes;
+            _number = number;
+            _messageId = Check.NotNull(messageId, "messageId");
         }
 
         /// <summary>
         /// Gets the number of bytes.
         /// </summary>
         /// <value>The number of bytes.</value>
-        public long Bytes { get; private set; }
+        public long Bytes
+        {
+            get { return _bytes; }
+        }
 
         /// <summary>
         /// Gets the segment number.
         /// </summary>
         /// <value>The segment number.</value>
-        public int Number { get; private set; }
+        public int Number
+        {
+            get { return _number; }
+        }
 
         /// <summary>
         /// Gets the Usenet message identifier.
         /// </summary>
         /// <value>The Usenet message identifier.</value>
-        public string MessageId { get; private set; }
+        public string MessageId
+        {
+            get { return _messageId; }
+        }
 
         private string DebuggerDisplay
         {
-            get { return string.Format("#{0} ({1} bytes)", Number, Bytes); }
+            get { return ToString(); }
         }
 
         /// <summary>
@@ -42,7 +57,7 @@ namespace Nzb
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return MessageId;
+            return string.Format("#{0} - {1} ({2} bytes)", Number.ToString(), MessageId, Bytes.ToString());
         }
     }
 }

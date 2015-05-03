@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using JetBrains.Annotations;
@@ -15,24 +16,25 @@ namespace Nzb
         /// <summary>
         /// The default encoding for a NZB document.
         /// </summary>
-        public static readonly System.Text.Encoding DefaultEncoding = System.Text.Encoding.GetEncoding("iso-8859-1");
+        public static readonly Encoding DefaultEncoding = Encoding.GetEncoding("iso-8859-1");
 
-        private static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, 0, TimeSpan.Zero);
+        private static readonly IReadOnlyList<NzbSegment> EmptySegments = new NzbSegment[0];
 
-        private static readonly XNamespace Namespace = "http://www.newzbin.com/DTD/2003/nzb";
+        private static readonly IReadOnlyList<string> EmptyGroups = new string[0];
+
+        private static readonly IReadOnlyDictionary<string, string> EmptyMetadata =
+            new Dictionary<string, string>(capacity: 0);
+
+        private readonly IReadOnlyDictionary<string, string> _metadata;
+
+        private readonly IReadOnlyList<NzbFile> _files;
 
         private readonly Lazy<long> _bytes;
 
-        private NzbDocument() : this(new Dictionary<string, string>(), new List<NzbFile>())
+        private NzbDocument(IReadOnlyDictionary<string, string> metadata, IReadOnlyList<NzbFile> files)
         {
-        }
-
-        private NzbDocument([NotNull] IReadOnlyDictionary<string, string> metadata,
-            [NotNull] IReadOnlyList<NzbFile> files)
-        {
-            Metadata = Check.NotNull(metadata, "metadata");
-            Files = Check.NotNull(files, "files");
-
+            _metadata = Check.NotNull(metadata, "metadata");
+            _files = Check.NotNull(files, "files");
             _bytes = new Lazy<long>(() => Files.Sum(x => x.Bytes));
         }
 
@@ -40,13 +42,19 @@ namespace Nzb
         /// Gets the metadata associated with the contents of the document.
         /// </summary>
         /// <value>The content metadata.</value>
-        public IReadOnlyDictionary<string, string> Metadata { get; private set; }
+        public IReadOnlyDictionary<string, string> Metadata
+        {
+            get { return _metadata; }
+        }
 
         /// <summary>
         /// Gets the information about all the files linked in the document.
         /// </summary>
         /// <value>The files linked in the document.</value>
-        public IReadOnlyList<INzbFile> Files { get; private set; }
+        public IReadOnlyList<INzbFile> Files
+        {
+            get { return _files; }
+        }
 
         /// <summary>
         /// Gets the total number of bytes for all files linked in the document.
@@ -55,6 +63,11 @@ namespace Nzb
         public long Bytes
         {
             get { return _bytes.Value; }
+        }
+
+        private string DebuggerDisplay
+        {
+            get { return ToString(); }
         }
 
         /// <summary>
@@ -73,7 +86,7 @@ namespace Nzb
         /// <param name="stream">The stream.</param>
         /// <param name="encoding">The encoding to use.</param>
         [Pure, NotNull]
-        public static async Task<INzbDocument> Load([NotNull] Stream stream, [NotNull] System.Text.Encoding encoding)
+        public static async Task<INzbDocument> Load([NotNull] Stream stream, [NotNull] Encoding encoding)
         {
             Check.NotNull(stream, "stream");
             Check.NotNull(encoding, "encoding");
@@ -88,6 +101,7 @@ namespace Nzb
         /// Parses the specified text.
         /// </summary>
         /// <param name="text">The text to parse.</param>
+        /// <exception cref="Nzb.InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
         [Pure, NotNull]
         public static INzbDocument Parse([NotNull] string text)
         {
@@ -95,10 +109,10 @@ namespace Nzb
 
             var document = XDocument.Parse(text);
 
-            var nzbElement = document.Element(Namespace + "nzb");
+            var nzbElement = document.Element(Constants.NzbElement);
             if (nzbElement == null)
             {
-                return new NzbDocument();
+                throw new InvalidNzbFormatException("Could not find required 'nzb' element.");
             }
 
             var metadata = ParseMetadata(nzbElement);
@@ -108,102 +122,100 @@ namespace Nzb
             return new NzbDocument(metadata, files);
         }
 
-        private static IReadOnlyDictionary<string, string> ParseMetadata(XContainer nzbElement)
+        public override string ToString()
         {
-            var metadata = new Dictionary<string, string>();
+            return string.Format("Files: {0}", _files.Count.ToString());
+        }
 
-            var headElement = nzbElement.Element(Namespace + "head");
-            if (headElement == null)
+        private static IReadOnlyDictionary<string, string> ParseMetadata(XContainer element)
+        {
+            var headElement = element.Element(Constants.HeadElement);
+            if (headElement != null)
             {
+                var metaElements = headElement.Elements(Constants.MetaElement).ToList();
+
+                var metadata = new Dictionary<string, string>(capacity: metaElements.Count);
+
+                foreach (var metaElement in metaElements)
+                {
+                    var typeAttribute = metaElement.Attribute(Constants.TypeAttribute);
+                    if (typeAttribute != null)
+                    {
+                        metadata.Add(typeAttribute.Value, metaElement.Value);
+                    }
+                }
+
                 return metadata;
             }
 
-            foreach (var metaElement in headElement.Elements(Namespace + "meta"))
-            {
-                var typeAttribute = metaElement.Attribute("type");
-                if (typeAttribute != null)
-                {
-                    metadata.Add(typeAttribute.Value, metaElement.Value);
-                }
-            }
-
-            return metadata;
+            return EmptyMetadata;
         }
 
-        private static IReadOnlyList<NzbFile> ParseFiles(XContainer nzbElement)
+        private static IReadOnlyList<NzbFile> ParseFiles(XContainer element)
         {
-            var files = new List<NzbFile>();
-
-            foreach (var fileElement in nzbElement.Elements(Namespace + "file"))
-            {
-                var poster = fileElement.AttributeValueOrEmpty("poster");
-
-                var unixTimestamp = fileElement.AttributeValueOrEmpty("date").TryParseOrDefault<long>(long.TryParse);
-
-                var date = ConvertUnixTimestamp(unixTimestamp);
-
-                var subject = fileElement.AttributeValueOrEmpty("subject");
-
-                var groups = ParseGroups(fileElement);
-
-                var segments = ParseSegments(fileElement);
-
-                files.Add(new NzbFile(poster, date, subject, groups, segments));
-            }
-
-            return files;
+            return element.Elements(Constants.FileElement)
+                .Select(fileElement => ParseFile(fileElement))
+                .ToList();
         }
 
-        private static DateTimeOffset ConvertUnixTimestamp(long timestamp)
+        private static NzbFile ParseFile(XElement element)
         {
-            return UnixEpoch.AddSeconds(timestamp).ToLocalTime();
+            var poster = element.AttributeValueOrEmpty(Constants.PosterAttribute);
+
+            var unixTimestamp = element
+                .AttributeValueOrEmpty(Constants.DateAttribute)
+                .TryParseOrDefault<long>(long.TryParse);
+
+            var date = unixTimestamp.ToUnixEpoch();
+
+            var subject = element.AttributeValueOrEmpty(Constants.SubjectAttribute);
+
+            var groups = ParseGroups(element);
+
+            var segments = ParseSegments(element);
+
+            return new NzbFile(poster, date, subject, groups, segments);
         }
 
-        private static IReadOnlyList<string> ParseGroups(XContainer fileElement)
+        private static IReadOnlyList<string> ParseGroups(XContainer element)
         {
-            var groups = new List<string>();
-
-            var groupsElement = fileElement.Element(Namespace + "groups");
-            if (groupsElement == null)
+            var groupsElement = element.Element(Constants.GroupsElement);
+            if (groupsElement != null)
             {
-                return groups;
+                return groupsElement.Elements(Constants.GroupElement)
+                    .Select(x => x.Value)
+                    .ToList();
             }
 
-            foreach (var groupElement in groupsElement.Elements(Namespace + "group"))
-            {
-                groups.Add(groupElement.Value);
-            }
-
-            return groups;
+            return EmptyGroups;
         }
 
-        private static IReadOnlyList<NzbSegment> ParseSegments(XContainer fileElement)
+        private static IReadOnlyList<NzbSegment> ParseSegments(XContainer element)
         {
-            var segments = new List<NzbSegment>();
-
-            var segmentsElement = fileElement.Element(Namespace + "segments");
-            if (segmentsElement == null)
+            var segmentsElement = element.Element(Constants.SegmentsElement);
+            if (segmentsElement != null)
             {
-                return segments;
+                return segmentsElement.Elements(Constants.SegmentElement)
+                    .Select(segmentElement => ParseSegment(segmentElement))
+                    .ToList();
             }
 
-            foreach (var element in segmentsElement.Elements(Namespace + "segment"))
-            {
-                var bytes = element.AttributeValueOrEmpty("bytes").TryParseOrDefault<long>(long.TryParse);
-
-                var number = element.AttributeValueOrEmpty("number").TryParseOrDefault<int>(int.TryParse);
-
-                var messageId = element.Value;
-
-                segments.Add(new NzbSegment(bytes, number, messageId));
-            }
-
-            return segments;
+            return EmptySegments;
         }
 
-        private string DebuggerDisplay
+        private static NzbSegment ParseSegment(XElement element)
         {
-            get { return string.Format("Files: {0}", Files.Count); }
+            var bytes = element
+                .AttributeValueOrEmpty(Constants.BytesAttribute)
+                .TryParseOrDefault<long>(long.TryParse);
+
+            var number = element
+                .AttributeValueOrEmpty(Constants.NumberAttribute)
+                .TryParseOrDefault<int>(int.TryParse);
+
+            var messageId = element.Value;
+
+            return new NzbSegment(bytes, number, messageId);
         }
     }
 }

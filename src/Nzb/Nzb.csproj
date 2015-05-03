@@ -33,6 +33,7 @@
     <DefineConstants>TRACE;RESOURCE_HELPER_TYPEINFO; RESOURCE_HELPER_INTERNAL;JETBRAINS_ANNOTATIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Nzb.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
@@ -41,8 +42,11 @@
   <ItemGroup>
     <Compile Include="Annotations.cs" />
     <Compile Include="Check.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="EpochUtility.cs" />
     <Compile Include="HelperExtensions.cs" />
     <Compile Include="IFluentInterface.cs" />
+    <Compile Include="InvalidNzbFormatException.cs" />
     <Compile Include="INzbDocument.cs" />
     <Compile Include="INzbFile.cs" />
     <Compile Include="INzbSegment.cs" />
