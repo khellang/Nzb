@@ -10,6 +10,9 @@ using JetBrains.Annotations;
 
 namespace Nzb
 {
+    /// <summary>
+    /// Represents an NZB document.
+    /// </summary>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class NzbDocument : INzbDocument
     {
@@ -122,6 +125,10 @@ namespace Nzb
             return new NzbDocument(metadata, files);
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
         public override string ToString()
         {
             return string.Format("Files: {0}", _files.Count.ToString());
