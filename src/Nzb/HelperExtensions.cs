@@ -12,10 +12,7 @@ namespace Nzb
             return action.Invoke(stringValue, out value) ? value : default(T);
         }
 
-        public static string AttributeValueOrEmpty(this XElement element, string attributeName)
-        {
-            var attribute = element.Attribute(attributeName);
-            return attribute != null ? attribute.Value : string.Empty;
-        }
+        public static string AttributeValueOrEmpty(this XElement element, string attributeName) =>
+            element.Attribute(attributeName)?.Value ?? string.Empty;
     }
 }
