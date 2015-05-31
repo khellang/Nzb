@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using JetBrains.Annotations;
 
 namespace Nzb
@@ -9,20 +8,19 @@ namespace Nzb
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     internal sealed class NzbFile : INzbFile
     {
-        private readonly Lazy<long> _bytes;
-
         public NzbFile([NotNull] string poster,
             DateTimeOffset date,
             [NotNull] string subject,
             [NotNull] IReadOnlyList<string> groups,
-            [NotNull] IReadOnlyList<NzbSegment> segments)
+            [NotNull] IReadOnlyList<NzbSegment> segments,
+            long bytes)
         {
             Poster = Check.NotNull(poster, nameof(poster));
             Date = date;
             Subject = Check.NotNull(subject, nameof(subject));
             Groups = Check.NotNull(groups, nameof(groups));
             Segments = Check.NotNull(segments, nameof(segments));
-            _bytes = new Lazy<long>(() => Segments.Sum(x => x.Bytes));
+            Bytes = bytes;
         }
 
         /// <summary>
@@ -59,7 +57,7 @@ namespace Nzb
         /// Gets the total number of bytes for all the file's segments.
         /// </summary>
         /// <value>The total number of bytes for all the file's segments.</value>
-        public long Bytes => _bytes.Value;
+        public long Bytes { get; }
 
         private string DebuggerDisplay => ToString();
 

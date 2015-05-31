@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -29,13 +28,11 @@ namespace Nzb
         private static readonly IReadOnlyDictionary<string, string> EmptyMetadata =
             new Dictionary<string, string>(capacity: 0);
 
-        private readonly Lazy<long> _bytes;
-
-        private NzbDocument(IReadOnlyDictionary<string, string> metadata, IReadOnlyList<NzbFile> files)
+        private NzbDocument(IReadOnlyDictionary<string, string> metadata, IReadOnlyList<NzbFile> files, long bytes)
         {
             Metadata = Check.NotNull(metadata, nameof(metadata));
             Files = Check.NotNull(files, nameof(files));
-            _bytes = new Lazy<long>(() => Files.Sum(x => x.Bytes));
+            Bytes = bytes;
         }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace Nzb
         /// Gets the total number of bytes for all files linked in the document.
         /// </summary>
         /// <value>The total number of bytes for all files linked in the document.</value>
-        public long Bytes => _bytes.Value;
+        public long Bytes { get; }
 
         private string DebuggerDisplay => ToString();
 
@@ -102,9 +99,10 @@ namespace Nzb
 
             var metadata = ParseMetadata(nzbElement);
 
-            var files = ParseFiles(nzbElement);
+            long bytes;
+            var files = ParseFiles(nzbElement, out bytes);
 
-            return new NzbDocument(metadata, files);
+            return new NzbDocument(metadata, files, bytes);
         }
 
         /// <summary>
@@ -121,9 +119,9 @@ namespace Nzb
                 return EmptyMetadata;
             }
 
-            var metaElements = headElement.Elements(Constants.MetaElement).ToList();
+            var metaElements = headElement.Elements(Constants.MetaElement).ToArray();
 
-            var metadata = new Dictionary<string, string>(capacity: metaElements.Count);
+            var metadata = new Dictionary<string, string>(capacity: metaElements.Length);
 
             foreach (var metaElement in metaElements)
             {
@@ -137,11 +135,24 @@ namespace Nzb
             return metadata;
         }
 
-        private static IReadOnlyList<NzbFile> ParseFiles(XContainer element)
+        private static IReadOnlyList<NzbFile> ParseFiles(XContainer element, out long bytes)
         {
-            return element.Elements(Constants.FileElement)
-                .Select(fileElement => ParseFile(fileElement))
-                .ToList();
+            var fileElements = element.Elements(Constants.FileElement).ToArray();
+
+            var files = new List<NzbFile>(capacity: fileElements.Length);
+
+            bytes = 0;
+
+            foreach (var fileElement in fileElements)
+            {
+                var file = ParseFile(fileElement);
+
+                bytes += file.Bytes;
+
+                files.Add(file);
+            }
+
+            return files;
         }
 
         private static NzbFile ParseFile(XElement element)
@@ -158,35 +169,56 @@ namespace Nzb
 
             var groups = ParseGroups(element);
 
-            var segments = ParseSegments(element);
+            long bytes;
+            var segments = ParseSegments(element, out bytes);
 
-            return new NzbFile(poster, date, subject, groups, segments);
+            return new NzbFile(poster, date, subject, groups, segments, bytes);
         }
 
         private static IReadOnlyList<string> ParseGroups(XContainer element)
         {
             var groupsElement = element.Element(Constants.GroupsElement);
-            if (groupsElement != null)
+            if (groupsElement == null)
             {
-                return groupsElement.Elements(Constants.GroupElement)
-                    .Select(x => x.Value)
-                    .ToList();
+                return EmptyGroups;
             }
 
-            return EmptyGroups;
+            var groupElements = groupsElement.Elements(Constants.GroupElement).ToArray();
+
+            var groups = new List<string>(capacity: groupElements.Length);
+
+            foreach (var groupElement in groupElements)
+            {
+                groups.Add(groupElement.Value);
+            }
+
+            return groups;
         }
 
-        private static IReadOnlyList<NzbSegment> ParseSegments(XContainer element)
+        private static IReadOnlyList<NzbSegment> ParseSegments(XContainer element, out long bytes)
         {
+            bytes = 0;
+
             var segmentsElement = element.Element(Constants.SegmentsElement);
-            if (segmentsElement != null)
+            if (segmentsElement == null)
             {
-                return segmentsElement.Elements(Constants.SegmentElement)
-                    .Select(segmentElement => ParseSegment(segmentElement))
-                    .ToList();
+                return EmptySegments;
             }
 
-            return EmptySegments;
+            var segmentElements = segmentsElement.Elements(Constants.SegmentElement).ToArray();
+
+            var segments = new List<NzbSegment>(capacity: segmentElements.Length);
+
+            foreach (var segmentElement in segmentElements)
+            {
+                var segment = ParseSegment(segmentElement);
+
+                bytes += segment.Bytes;
+
+                segments.Add(segment);
+            }
+
+            return segments;
         }
 
         private static NzbSegment ParseSegment(XElement element)
