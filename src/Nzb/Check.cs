@@ -25,7 +25,7 @@ namespace Nzb
 
             NotEmpty(parameterName, nameof(parameterName));
 
-            throw new ArgumentNullException(parameterName, Strings.ArgumentNull(parameterName));
+            throw new ArgumentNullException(parameterName, $"The argument '{parameterName}' must not be null.");
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Nzb
             {
                 NotEmpty(parameterName, nameof(parameterName));
 
-                throw new ArgumentNullException(parameterName, Strings.ArgumentNull(parameterName));
+                throw new ArgumentNullException(parameterName, $"The argument '{parameterName}' must not be null.");
             }
 
             var trimmedValue = value.Trim();
@@ -52,7 +52,7 @@ namespace Nzb
             {
                 NotEmpty(parameterName, nameof(parameterName));
 
-                throw new ArgumentException(Strings.StringArgumentEmpty(parameterName), parameterName);
+                throw new ArgumentException($"The string argument '{parameterName}' must not be empty.", parameterName);
             }
 
             return value;

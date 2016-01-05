@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-VisualStudioVersion = 14.0.22823.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nzb", "src\Nzb\Nzb.csproj", "{30FC1B7F-8074-439B-90FF-2364D5D684FB}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Nzb", "src\Nzb\Nzb.xproj", "{180AA3A0-6A9D-4893-9BAE-D29AC1187B20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{64A6A275-E57E-4745-8F44-21009D00B1E2}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		global.json = global.json
+		NuGet.config = NuGet.config
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +19,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{30FC1B7F-8074-439B-90FF-2364D5D684FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30FC1B7F-8074-439B-90FF-2364D5D684FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30FC1B7F-8074-439B-90FF-2364D5D684FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30FC1B7F-8074-439B-90FF-2364D5D684FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{180AA3A0-6A9D-4893-9BAE-D29AC1187B20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{180AA3A0-6A9D-4893-9BAE-D29AC1187B20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{180AA3A0-6A9D-4893-9BAE-D29AC1187B20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{180AA3A0-6A9D-4893-9BAE-D29AC1187B20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
