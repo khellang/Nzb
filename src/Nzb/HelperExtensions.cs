@@ -1,4 +1,5 @@
 using System.Xml.Linq;
+using JetBrains.Annotations;
 
 namespace Nzb
 {
@@ -6,13 +7,17 @@ namespace Nzb
     {
         public delegate bool TryParse<T>(string stringValue, out T value);
 
+        [CanBeNull]
         public static T TryParseOrDefault<T>(this string stringValue , TryParse<T> action)
         {
             T value;
             return action.Invoke(stringValue, out value) ? value : default(T);
         }
 
-        public static string AttributeValueOrEmpty(this XElement element, string attributeName) =>
-            element.Attribute(attributeName)?.Value ?? string.Empty;
+        [NotNull]
+        public static string AttributeValueOrEmpty(this XElement element, string attributeName)
+        {
+            return element.Attribute(attributeName)?.Value ?? string.Empty;
+        }
     }
 }

@@ -10,23 +10,26 @@ using JetBrains.Annotations;
 namespace Nzb
 {
     /// <summary>
-    /// Represents an NZB document.
+    /// Represents a NZB document.
     /// </summary>
+    /// <remarks>
+    /// See <see href="http://wiki.sabnzbd.org/nzb-specs" /> for the specification.
+    /// </remarks>
+    [PublicAPI]
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class NzbDocument : INzbDocument
     {
         /// <summary>
         /// The default encoding for a NZB document.
         /// </summary>
-        [PublicAPI, NotNull]
+        [NotNull]
         public static readonly Encoding DefaultEncoding = Encoding.GetEncoding("iso-8859-1");
 
         private static readonly IReadOnlyList<NzbSegment> EmptySegments = new NzbSegment[0];
 
         private static readonly IReadOnlyList<string> EmptyGroups = new string[0];
 
-        private static readonly IReadOnlyDictionary<string, string> EmptyMetadata =
-            new Dictionary<string, string>(capacity: 0);
+        private static readonly IReadOnlyDictionary<string, string> EmptyMetadata = new Dictionary<string, string>(capacity: 0);
 
         private NzbDocument(IReadOnlyDictionary<string, string> metadata, IReadOnlyList<NzbFile> files, long bytes)
         {
@@ -59,7 +62,7 @@ namespace Nzb
         /// Loads the document from the specified stream, using <see cref="DefaultEncoding"/>.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        [PublicAPI, Pure, NotNull]
+        [Pure, NotNull]
         public static Task<INzbDocument> Load([NotNull] Stream stream) => Load(stream, DefaultEncoding);
 
         /// <summary>
@@ -67,7 +70,7 @@ namespace Nzb
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="encoding">The encoding to use.</param>
-        [PublicAPI, Pure, NotNull]
+        [Pure, NotNull]
         public static async Task<INzbDocument> Load([NotNull] Stream stream, [NotNull] Encoding encoding)
         {
             Check.NotNull(stream, nameof(stream));
@@ -84,7 +87,7 @@ namespace Nzb
         /// </summary>
         /// <param name="text">The text to parse.</param>
         /// <exception cref="Nzb.InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
-        [PublicAPI, Pure, NotNull]
+        [Pure, NotNull]
         public static INzbDocument Parse([NotNull] string text)
         {
             Check.NotEmpty(text, nameof(text));
@@ -92,6 +95,7 @@ namespace Nzb
             var document = XDocument.Parse(text);
 
             var nzbElement = document.Element(Constants.NzbElement);
+
             if (nzbElement == null)
             {
                 throw new InvalidNzbFormatException("Could not find required 'nzb' element.");
@@ -114,6 +118,7 @@ namespace Nzb
         private static IReadOnlyDictionary<string, string> ParseMetadata(XContainer element)
         {
             var headElement = element.Element(Constants.HeadElement);
+
             if (headElement == null)
             {
                 return EmptyMetadata;
@@ -178,6 +183,7 @@ namespace Nzb
         private static IReadOnlyList<string> ParseGroups(XContainer element)
         {
             var groupsElement = element.Element(Constants.GroupsElement);
+
             if (groupsElement == null)
             {
                 return EmptyGroups;
@@ -200,6 +206,7 @@ namespace Nzb
             bytes = 0;
 
             var segmentsElement = element.Element(Constants.SegmentsElement);
+
             if (segmentsElement == null)
             {
                 return EmptySegments;
