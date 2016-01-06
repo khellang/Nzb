@@ -131,6 +131,7 @@ namespace Nzb
             foreach (var metaElement in metaElements)
             {
                 var typeAttribute = metaElement.Attribute(Constants.TypeAttribute);
+
                 if (typeAttribute != null)
                 {
                     metadata.Add(typeAttribute.Value, metaElement.Value);
