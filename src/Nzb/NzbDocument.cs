@@ -88,7 +88,7 @@ namespace Nzb
         /// Parses the specified text.
         /// </summary>
         /// <param name="text">The text to parse.</param>
-        /// <exception cref="Nzb.InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
+        /// <exception cref="InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
         [Pure, NotNull]
         public static NzbDocument Parse([NotNull] string text)
         {
@@ -111,9 +111,9 @@ namespace Nzb
         }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
-        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public override string ToString() => $"Files: {Files.Count}";
 
         private static IReadOnlyDictionary<string, string> ParseMetadata(XContainer element)
