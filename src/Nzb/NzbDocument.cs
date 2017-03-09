@@ -105,8 +105,7 @@ namespace Nzb
 
             var metadata = ParseMetadata(nzbElement);
 
-            long bytes;
-            var files = ParseFiles(nzbElement, out bytes);
+            var files = ParseFiles(nzbElement, out long bytes);
 
             return new NzbDocument(metadata, files, bytes);
         }
@@ -177,8 +176,7 @@ namespace Nzb
 
             var groups = ParseGroups(element);
 
-            long bytes;
-            var segments = ParseSegments(element, out bytes);
+            var segments = ParseSegments(element, out long bytes);
 
             return new NzbFile(poster, date, subject, groups, segments, bytes);
         }
