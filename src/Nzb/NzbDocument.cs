@@ -17,7 +17,7 @@ namespace Nzb
     /// </remarks>
     [PublicAPI]
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    public sealed class NzbDocument : INzbDocument
+    public sealed class NzbDocument
     {
         /// <summary>
         /// The default encoding for a NZB document.
@@ -42,13 +42,15 @@ namespace Nzb
         /// Gets the metadata associated with the contents of the document.
         /// </summary>
         /// <value>The content metadata.</value>
+        [NotNull, ItemNotNull]
         public IReadOnlyDictionary<string, string> Metadata { get; }
 
         /// <summary>
         /// Gets the information about all the files linked in the document.
         /// </summary>
         /// <value>The files linked in the document.</value>
-        public IReadOnlyList<INzbFile> Files { get; }
+        [NotNull, ItemNotNull]
+        public IReadOnlyList<NzbFile> Files { get; }
 
         /// <summary>
         /// Gets the total number of bytes for all files linked in the document.
@@ -63,7 +65,7 @@ namespace Nzb
         /// </summary>
         /// <param name="stream">The stream.</param>
         [Pure, NotNull]
-        public static Task<INzbDocument> Load([NotNull] Stream stream) => Load(stream, DefaultEncoding);
+        public static Task<NzbDocument> Load([NotNull] Stream stream) => Load(stream, DefaultEncoding);
 
         /// <summary>
         /// Loads the document from the specified stream, using the specified encoding.
@@ -71,7 +73,7 @@ namespace Nzb
         /// <param name="stream">The stream.</param>
         /// <param name="encoding">The encoding to use.</param>
         [Pure, NotNull]
-        public static async Task<INzbDocument> Load([NotNull] Stream stream, [NotNull] Encoding encoding)
+        public static async Task<NzbDocument> Load([NotNull] Stream stream, [NotNull] Encoding encoding)
         {
             Check.NotNull(stream, nameof(stream));
             Check.NotNull(encoding, nameof(encoding));
@@ -88,7 +90,7 @@ namespace Nzb
         /// <param name="text">The text to parse.</param>
         /// <exception cref="Nzb.InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
         [Pure, NotNull]
-        public static INzbDocument Parse([NotNull] string text)
+        public static NzbDocument Parse([NotNull] string text)
         {
             Check.NotEmpty(text, nameof(text));
 

@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace Nzb
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    internal sealed class NzbFile : INzbFile
+    public sealed class NzbFile
     {
         public NzbFile([NotNull] string poster,
             DateTimeOffset date,
@@ -27,6 +27,7 @@ namespace Nzb
         /// Gets the poster of the file.
         /// </summary>
         /// <value>The poster of the file.</value>
+        [NotNull]
         public string Poster { get; }
 
         /// <summary>
@@ -39,19 +40,22 @@ namespace Nzb
         /// Gets the subject of the Usenet article.
         /// </summary>
         /// <value>The subject of the Usenet article.</value>
+        [NotNull]
         public string Subject { get; }
 
         /// <summary>
         /// Gets the groups this file has been posted in.
         /// </summary>
         /// <value>The groups this files has been posted in.</value>
+        [NotNull, ItemNotNull]
         public IReadOnlyList<string> Groups { get; }
 
         /// <summary>
         /// Gets the segments that makes up this file.
         /// </summary>
         /// <value>The segments that makes up this file.</value>
-        public IReadOnlyList<INzbSegment> Segments { get; }
+        [NotNull, ItemNotNull]
+        public IReadOnlyList<NzbSegment> Segments { get; }
 
         /// <summary>
         /// Gets the total number of bytes for all the file's segments.

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Nzb
 {
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
-    internal sealed class NzbSegment : INzbSegment
+    public sealed class NzbSegment
     {
         public NzbSegment(long bytes, int number, [NotNull] string messageId)
         {
@@ -29,6 +29,7 @@ namespace Nzb
         /// Gets the Usenet message identifier.
         /// </summary>
         /// <value>The Usenet message identifier.</value>
+        [NotNull]
         public string MessageId { get; }
 
         private string DebuggerDisplay => ToString();
