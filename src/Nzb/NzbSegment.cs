@@ -3,9 +3,18 @@ using JetBrains.Annotations;
 
 namespace Nzb
 {
+    /// <summary>
+    /// Represents a segment of an <see cref="NzbFile"/>.
+    /// </summary>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class NzbSegment
     {
+        /// <summary>
+        /// Creates an instance of an <see cref="NzbSegment"/>.
+        /// </summary>
+        /// <param name="bytes">The number of bytes.</param>
+        /// <param name="number">The segment number.</param>
+        /// <param name="messageId">The Usenet message identifier.</param>
         public NzbSegment(long bytes, int number, [NotNull] string messageId)
         {
             Bytes = bytes;

@@ -5,9 +5,21 @@ using JetBrains.Annotations;
 
 namespace Nzb
 {
+    /// <summary>
+    /// Represents a file linked in a <see cref="NzbDocument"/>.
+    /// </summary>
     [DebuggerDisplay("{DebuggerDisplay,nq}")]
     public sealed class NzbFile
     {
+        /// <summary>
+        /// Creates an instance of an <see cref="NzbFile"/>.
+        /// </summary>
+        /// <param name="poster">The file's poster.</param>
+        /// <param name="date">The date the server saw this file.</param>
+        /// <param name="subject">The subject of the Usenet article.</param>
+        /// <param name="groups">The groups this file has been posted in.</param>
+        /// <param name="segments">A list of segments that make up this file.</param>
+        /// <param name="bytes">Total number of bytes for all the file's segments.</param>
         public NzbFile([NotNull] string poster,
             DateTimeOffset date,
             [NotNull] string subject,
