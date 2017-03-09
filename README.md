@@ -2,14 +2,14 @@
 
 A tiny library for parsing NZB documents with .NET. The NZB Format Specification is [available here](http://wiki.sabnzbd.org/nzb-specs).
 
-The library is implemented as a Portable Class Library (PCL), with support for the following platforms (minimum):
+The library is implemented using .NET Standard 1.0, with support for the following platforms (minimum):
 
  - .NET Framework 4.5
  - Windows 8
  - Windows Phone 8.1
  - Windows Phone Silverlight 8
  - Xamarin.Android
- - Xamarin.iOS (Classic)
+ - Xamarin.iOS
 
 It is shipped as [a NuGet package](https://www.nuget.org/packages/Nzb).
 
@@ -28,10 +28,9 @@ Using the library couldn't be more simple. There are two methods to call:
 
 The library consists of four public types:
 
- 1. `NzbDocument` - Covered above.
- 2. `INzbDocument` - Represents an NZB document. This is the type returned from `NzbDocument.Load` or `NzbDocument.Parse`.
- 3. `INzbFile` - Represents a file linked in the NZB document.
- 4. `INzbSegment` - Represents one (of potentially many) segment(s) that makes up a `INzbFile`.
+ 1. `NzbDocument` - Represents an NZB document. This is the type returned from `NzbDocument.Load` or `NzbDocument.Parse`.
+ 2. `NzbFile` - Represents a file linked in the NZB document.
+ 3. `NzbSegment` - Represents one (of potentially many) segment(s) that makes up an `NzbFile`.
 
 ## Example
 
