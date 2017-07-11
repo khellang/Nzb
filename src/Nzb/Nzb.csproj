@@ -2,12 +2,11 @@
   <PropertyGroup>
     <Description>A tiny library for parsing nzb documents with .NET</Description>
     <Copyright>Copyright © Kristian Hellang 2017</Copyright>
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>2.1.0</VersionPrefix>
     <Authors>Kristian Hellang</Authors>
-    <TargetFrameworks>netstandard1.0</TargetFrameworks>
-    <AssemblyName>Nzb</AssemblyName>
-    <PackageId>Nzb</PackageId>
     <PackageTags>nzb;parser;usenet</PackageTags>
+    <TargetFrameworks>netstandard1.0</TargetFrameworks>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageIconUrl>https://raw.githubusercontent.com/khellang/Nzb/master/etc/nzb_256.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/khellang/Nzb</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/khellang/Nzb/master/LICENSE</PackageLicenseUrl>

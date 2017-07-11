@@ -5,7 +5,7 @@ namespace Nzb
     /// <summary>
     /// Thrown if parsing of an NZB document fails.
     /// </summary>
-    public class InvalidNzbFormatException : Exception
+    public class InvalidNzbFormatException : FormatException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="InvalidNzbFormatException" /> class with a specified error message.
