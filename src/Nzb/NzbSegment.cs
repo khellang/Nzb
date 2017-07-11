@@ -49,7 +49,7 @@ namespace Nzb
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
         public override string ToString()
         {
-            return $"#{Number} - {MessageId} ({Bytes} bytes)";
+            return $"#{Number} - {MessageId}, Size: {Bytes} bytes";
         }
     }
 }

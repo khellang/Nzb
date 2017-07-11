@@ -72,6 +72,7 @@ namespace Nzb
         /// </summary>
         /// <param name="stream">The stream.</param>
         /// <param name="encoding">The encoding to use.</param>
+        /// <exception cref="InvalidNzbFormatException">The <paramref name="stream"/> represents an invalid NZB document.</exception>
         [Pure, NotNull]
         public static async Task<NzbDocument> Load([NotNull] Stream stream, [NotNull] Encoding encoding)
         {
@@ -88,7 +89,7 @@ namespace Nzb
         /// Parses the specified text.
         /// </summary>
         /// <param name="text">The text to parse.</param>
-        /// <exception cref="InvalidNzbFormatException">The text represents an invalid NZB document.</exception>
+        /// <exception cref="InvalidNzbFormatException">The <paramref name="text"/> represents an invalid NZB document.</exception>
         [Pure, NotNull]
         public static NzbDocument Parse([NotNull] string text)
         {
@@ -114,7 +115,7 @@ namespace Nzb
         /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="string" /> that represents this instance.</returns>
-        public override string ToString() => $"Files: {Files.Count}";
+        public override string ToString() => $"Files: {Files.Count}, Size: {Bytes} bytes";
 
         private static IReadOnlyDictionary<string, string> ParseMetadata(XContainer element)
         {
