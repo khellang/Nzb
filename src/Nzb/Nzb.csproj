@@ -5,7 +5,7 @@
     <VersionPrefix>2.1.0</VersionPrefix>
     <Authors>Kristian Hellang</Authors>
     <PackageTags>nzb;parser;usenet</PackageTags>
-    <TargetFrameworks>netstandard1.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageIconUrl>https://raw.githubusercontent.com/khellang/Nzb/master/etc/nzb_256.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/khellang/Nzb</PackageProjectUrl>
