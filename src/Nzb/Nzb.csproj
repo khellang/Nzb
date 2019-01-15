@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A tiny library for parsing nzb documents with .NET</Description>
-    <Copyright>Copyright © Kristian Hellang 2017</Copyright>
-    <VersionPrefix>2.1.0</VersionPrefix>
+    <Copyright>Copyright © Kristian Hellang 2019</Copyright>
+    <VersionPrefix>2.2.0</VersionPrefix>
     <Authors>Kristian Hellang</Authors>
     <PackageTags>nzb;parser;usenet</PackageTags>
     <TargetFrameworks>netstandard1.0;netstandard2.0</TargetFrameworks>
