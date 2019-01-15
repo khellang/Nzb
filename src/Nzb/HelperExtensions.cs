@@ -10,8 +10,7 @@ namespace Nzb
         [CanBeNull]
         public static T TryParseOrDefault<T>(this string stringValue, TryParse<T> action)
         {
-            T value;
-            return action.Invoke(stringValue, out value) ? value : default(T);
+            return action.Invoke(stringValue, out var value) ? value : default(T);
         }
 
         [NotNull]

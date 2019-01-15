@@ -6,7 +6,7 @@ namespace Nzb
     /// <summary>
     /// Represents a segment of an <see cref="NzbFile"/>.
     /// </summary>
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public sealed class NzbSegment
     {
         /// <summary>

@@ -8,7 +8,7 @@ namespace Nzb
     /// <summary>
     /// Represents a file linked in a <see cref="NzbDocument"/>.
     /// </summary>
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public sealed class NzbFile
     {
         /// <summary>

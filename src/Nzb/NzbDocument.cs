@@ -16,7 +16,7 @@ namespace Nzb
     /// See <see href="http://wiki.sabnzbd.org/nzb-specs" /> for the specification.
     /// </remarks>
     [PublicAPI]
-    [DebuggerDisplay("{DebuggerDisplay,nq}")]
+    [DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
     public sealed class NzbDocument
     {
         /// <summary>
@@ -42,7 +42,7 @@ namespace Nzb
         /// Gets the metadata associated with the contents of the document.
         /// </summary>
         /// <value>The content metadata.</value>
-        [NotNull, ItemNotNull]
+        [NotNull]
         public IReadOnlyDictionary<string, string> Metadata { get; }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Nzb
 
             var metadata = ParseMetadata(nzbElement);
 
-            var files = ParseFiles(nzbElement, out long bytes);
+            var files = ParseFiles(nzbElement, out var bytes);
 
             return new NzbDocument(metadata, files, bytes);
         }
