@@ -9,12 +9,16 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageIconUrl>https://raw.githubusercontent.com/khellang/Nzb/master/etc/nzb_256.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/khellang/Nzb</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/khellang/Nzb/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/khellang/Nzb</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="10.4.0">
-      <PrivateAssets>All</PrivateAssets>
-    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="all" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" PrivateAssets="all" />
   </ItemGroup>
 </Project>
