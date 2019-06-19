@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Description>A tiny library for parsing nzb documents with .NET</Description>
     <Copyright>Copyright © Kristian Hellang 2019</Copyright>
-    <VersionPrefix>2.2.0</VersionPrefix>
+    <VersionPrefix>2.3.0</VersionPrefix>
     <Authors>Kristian Hellang</Authors>
     <PackageId>Nzb</PackageId>
     <PackageTags>nzb;parser;usenet</PackageTags>
